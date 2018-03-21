@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.http import HttpResponse
 from blog.models import Article
-
+from rest_framework.decorators import api_view
 
 # Create your views here.
 
@@ -17,12 +17,13 @@ def indexHtml(request):
     print(request)
     return HttpResponse(Article.objects.all().count)
 
-
+@api_view(['POST'])
 def addArticle(request):
-    title = request.GET.get('title', '')
+    print(request.data)
+    title = request.data["title"]
     a = Article(title=title)
     a.save()
-    return HttpResponse("success")
+    return HttpResponse("success"+str(a.id))
 
 
 def articlesCount(request):
