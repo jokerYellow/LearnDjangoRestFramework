@@ -18,18 +18,13 @@ from rest_framework import routers
 from tutorial.quickstart import views
 from django.conf.urls import url, include
 from django.contrib import admin
-from blog.views import index,indexHtml,addArticle,articlesCount,deleteArticle
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 urlpatterns = [
-    url(r'^addArticle/',addArticle),
-    url(r'^articleCount/',articlesCount),
-    url(r'^deleteArticle/',deleteArticle),
-    url(r'^index/',index),
-    url(r'^indexhtml',indexHtml),
     url(r'^admin/', admin.site.urls),
     url(r'^app/info',views.textView),
     url(r'^', include(router.urls)),
+    url(r'^',include('blog.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
