@@ -1,12 +1,19 @@
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.http import HttpResponse
-from blog.models import Article
-from blog.serializers import AArticleSerializer
+from tutorial.blog.models import Article
+from tutorial.blog.serializers import AArticleSerializer
 from rest_framework.decorators import api_view
-from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+
+class Blogs(APIView):
+    def get(self, request, format=None):
+        articles = Article.objects.all()
+        serializer = AArticleSerializer(articles, many=True)
+        return Response(serializer.data)
 
 
 @csrf_exempt
@@ -27,6 +34,20 @@ def article_list(request):
             article.save()
             return JsonResponse(article.data, status=200)
         return JsonResponse(article.errors, status=400)
+
+
+@api_view(['GET'])
+def article_list_apiview(request):
+    if request.method == 'GET':
+        articles = Article.objects.all()
+        serializer = AArticleSerializer(articles, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        article = AArticleSerializer(data=request.data)
+        if article.is_valid():
+            article.save()
+            return Response(article.data, status=200)
+        return Response(article.errors, status=400)
 
 
 # Create your views here.

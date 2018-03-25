@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from blog.models import Article
+from tutorial.blog.models import Article
 
 class ArticleSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
